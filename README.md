@@ -15,7 +15,7 @@
    var cities = [{id: 1, name: 'Zürich'}, {id: 2, name: 'Reykjavík'}]
    var get = filter(cities, 'name')
    var results = get('zurich')
-   // -> returns [{name: 'Zürich'}]
+   // -> returns [{id: 1, name: 'Zürich'}]
  ```
 
 This module doesn't do any stemming except replacing umlauts.
