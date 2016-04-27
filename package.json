@@ -1,0 +1,14 @@
+{
+  "name": "simple-text-search",
+  "version": "1.0.0",
+  "description": "A small in-memory text search that supports umlauts",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && node test.js"
+  },
+  "author": "Marc Bachmann <marc.brookman@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "standard": "^6.0.8"
+  }
+}
