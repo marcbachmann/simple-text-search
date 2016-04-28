@@ -76,8 +76,8 @@ function charReplacer () {
   })
 
   var toReplace = new RegExp('[' + Object.keys(charMap).join('') + ']', 'g')
-  function replaceChar (char) { return charMap[char] || char }
+  function replacer (char) { return charMap[char] || char }
   return function replaceChars (str) {
-    return str.replace(toReplace, replaceChar)
+    return str.replace(toReplace, replacer)
   }
 }
