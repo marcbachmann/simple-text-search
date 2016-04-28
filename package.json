@@ -10,5 +10,14 @@
   "license": "MIT",
   "devDependencies": {
     "standard": "^6.0.8"
-  }
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcbachmann/simple-text-search.git"
+  },
+  "bugs": {
+    "url": "https://github.com/marcbachmann/simple-text-search/issues"
+  },
+  "homepage": "https://github.com/marcbachmann/simple-text-search#readme"
 }
