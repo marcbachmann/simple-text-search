@@ -1,6 +1,6 @@
 {
   "name": "simple-text-search",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A small in-memory text search that supports umlauts",
   "main": "index.js",
   "scripts": {
