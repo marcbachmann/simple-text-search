@@ -1,5 +1,7 @@
 # simple-text-search
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/marcbachmann/simple-text-search.svg)](https://greenkeeper.io/)
+
 ## Usage
 
 ```
