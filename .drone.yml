@@ -1,0 +1,28 @@
+---
+kind: pipeline
+name: default
+
+clone:
+  depth: 50
+
+steps:
+- name: npm-install
+  image: node:10
+  commands: ["npm install"]
+
+- name: test
+  image: node:10
+  commands: ["npm test"]
+
+- name: release
+  image: livingdocs/semantic-release:v1.0.0
+  environment:
+    GH_TOKEN:
+      from_secret: GH_TOKEN
+    NPM_TOKEN:
+      from_secret: NPM_TOKEN
+---
+kind: signature
+hmac: c7ebeb8dcbe929247fe0567d8cbd83668531db0d67dd66ed461d9095dcb9392f
+
+...
