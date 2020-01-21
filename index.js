@@ -1,8 +1,8 @@
-module.exports = search
+module.exports = prepareSimpleTextSearch
 
 // Usage:
 //  ```
-//    var get = search(['foo', 'bar', 'foobar'])
+//    var get = simpleTextSearch(['foo', 'bar', 'foobar'])
 //    var results = get('foo')
 //    // -> returns ['foo', 'foobar']
 //  ```
@@ -10,14 +10,17 @@ module.exports = search
 //  Objects in a collection get stringified to search it.
 //  You can also define a property to search in:
 //  ```
-//    var get = serach([{name: 'Zürich'}, {name: 'Marc'}], 'name')
+//    var get = simpleTextSearch([{name: 'Zürich'}, {name: 'Marc'}], 'name')
 //    var results = get('zurich')
 //    // -> returns [{name: 'Marc'}]
 //  ```
-function search (collection, property) {
-  return function (q) {
-    if (!collection) return collection
-    return collection.filter(matches(toQuery(q), property))
+function prepareSimpleTextSearch (collection, property) {
+  return function simpleTextSearch (q) {
+    if (!collection || !q) return collection
+    const filter = matches(toQuery(q), property)
+    const result = []
+    for (const elem of collection) if (filter(elem)) result.push(elem)
+    return result
   }
 }
 
@@ -30,7 +33,7 @@ function toQuery (str) {
 }
 
 function matches (query, prop) {
-  return function (val) {
+  return function filter (val) {
     if (typeof prop === 'string') val = val && val[prop]
     if (typeof val === 'object') val = JSON.stringify(val)
     if (typeof val !== 'string') return false
@@ -52,21 +55,21 @@ function clean (str) {
 
 function charReplacer () {
   var charMap = {
-    'äàáâäæãåā': 'a',
-    'çćč': 'c',
-    'đð': 'd',
-    'èéêëēėę': 'e',
-    'îïíīįì': 'i',
-    'ł': 'l',
-    'ñńň': 'n',
-    'ôöòóœøōõ': 'o',
-    'ř': 'r',
-    'śš': 's',
-    'ß': 'ss',
-    'ť': 't',
-    'ûüùúūů': 'u',
-    'ÿý': 'y',
-    'žżŻź': 'z'
+    äàáâäæãåā: 'a',
+    çćč: 'c',
+    đð: 'd',
+    èéêëēėę: 'e',
+    îïíīįì: 'i',
+    ł: 'l',
+    ñńň: 'n',
+    ôöòóœøōõ: 'o',
+    ř: 'r',
+    śš: 's',
+    ß: 'ss',
+    ť: 't',
+    ûüùúūů: 'u',
+    ÿý: 'y',
+    žżŻź: 'z'
   }
 
   Object.keys(charMap).forEach(function (keys) {
