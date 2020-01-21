@@ -1,6 +1,6 @@
 {
   "name": "simple-text-search",
-  "version": "1.0.2",
+  "version": "0.0.0-placeholder",
   "description": "A small in-memory text search that supports umlauts",
   "keywords": [
     "search",
