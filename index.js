@@ -15,37 +15,41 @@ module.exports = prepareSimpleTextSearch
 //    // -> returns [{name: 'Marc'}]
 //  ```
 function prepareSimpleTextSearch (collection, property) {
+  let cachedPrunedElements
+
+  function * prunedElements () {
+    let i = -1
+    cachedPrunedElements = []
+    for (const elem of collection) {
+      i = i + 1
+      let val = elem
+      if (typeof property === 'string') val = val && val[property]
+      if (typeof val === 'object') val = JSON.stringify(val)
+      else if (typeof val !== 'string') continue
+      val = { pruned: clean(val), elem }
+      cachedPrunedElements[i] = val
+      yield val
+    }
+  }
+
   return function simpleTextSearch (q) {
     if (!collection || !q) return collection
-    const filter = matches(toQuery(q), property)
+    const regex = toRegex(q)
     const result = []
-    for (const elem of collection) if (filter(elem)) result.push(elem)
+    for (const { pruned, elem } of cachedPrunedElements || prunedElements()) {
+      if (regex.test(pruned)) result.push(elem)
+    }
     return result
   }
 }
 
-function toQuery (str) {
-  return clean(str)
-    .split(/\b/)
-    .filter(function (token) {
-      return /\b/.test(token)
-    })
-}
-
-function matches (query, prop) {
-  return function filter (val) {
-    if (typeof prop === 'string') val = val && val[prop]
-    if (typeof val === 'object') val = JSON.stringify(val)
-    if (typeof val !== 'string') return false
-
-    for (var i = 0; i < query.length; i++) {
-      if (!~clean(val).indexOf(query[i])) {
-        return false
-      }
-    }
-
-    return true
+function toRegex (str) {
+  const content = []
+  for (const token of clean(str).split(/\b/)) {
+    if (!/\b/.test(token)) continue
+    content.push(token.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d'))
   }
+  return new RegExp(`(${content.join('|')})`, 'i')
 }
 
 var replaceChar = charReplacer()
