@@ -38,7 +38,7 @@ function prepareSimpleTextSearch (collection, property) {
     const result = []
     for (const { pruned, elem } of cachedPrunedElements || prunedElements()) {
       const match = pruned.match(regex)
-      if (match && match.length === length) result.push(elem)
+      if (match && match.length >= length) result.push(elem)
     }
     return result
   }
