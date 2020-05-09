@@ -34,10 +34,11 @@ function prepareSimpleTextSearch (collection, property) {
 
   return function simpleTextSearch (q) {
     if (!collection || !q) return collection
-    const regex = toRegex(q)
+    const { regex, length } = toRegex(q)
     const result = []
     for (const { pruned, elem } of cachedPrunedElements || prunedElements()) {
-      if (regex.test(pruned)) result.push(elem)
+      const match = pruned.match(regex)
+      if (match && match.length === length) result.push(elem)
     }
     return result
   }
@@ -49,7 +50,10 @@ function toRegex (str) {
     if (!/\b/.test(token)) continue
     content.push(token.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d'))
   }
-  return new RegExp(`(${content.join('|')})`, 'i')
+  return {
+    regex: new RegExp(`(${content.join('|')})`, 'ig'),
+    length: content.length
+  }
 }
 
 var replaceChar = charReplacer()
