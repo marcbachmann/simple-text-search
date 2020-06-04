@@ -34,61 +34,57 @@ function prepareSimpleTextSearch (collection, property) {
 
   return function simpleTextSearch (q) {
     if (!collection || !q) return collection
-    const { regex, length } = toRegex(q)
+    const tokens = toQueryTokens(q)
     const result = []
-    for (const { pruned, elem } of cachedPrunedElements || prunedElements()) {
-      const match = pruned.match(regex)
-      if (match && match.length >= length) result.push(elem)
+
+    // eslint-disable-next-line no-labels
+    entries: for (const { pruned, elem } of cachedPrunedElements || prunedElements()) {
+      let i = tokens.length
+      // eslint-disable-next-line no-labels
+      while (i--) if (pruned.indexOf(tokens[i]) === -1) continue entries
+      result.push(elem)
     }
     return result
   }
 }
 
-function toRegex (str) {
+function toQueryTokens (str) {
   const content = []
   for (const token of clean(str).split(/\b/)) {
     if (!/\b/.test(token)) continue
-    content.push(token.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d'))
+    content.push(token.trim())
   }
-  return {
-    regex: new RegExp(`(${content.join('|')})`, 'ig'),
-    length: content.length
+  return content
+}
+
+const specialCharMap = {
+  äàáâäæãåā: 'a',
+  çćč: 'c',
+  đð: 'd',
+  èéêëēėę: 'e',
+  îïíīįì: 'i',
+  ł: 'l',
+  ñńň: 'n',
+  ôöòóœøōõ: 'o',
+  ř: 'r',
+  śš: 's',
+  ß: 'ss',
+  ť: 't',
+  ûüùúūů: 'u',
+  ÿý: 'y',
+  žżŻź: 'z'
+}
+
+const charMap = { '\\W+': ' ' }
+for (const keys of Object.keys(specialCharMap)) {
+  for (const char of keys) {
+    charMap[char] = specialCharMap[keys]
   }
 }
 
-var replaceChar = charReplacer()
+const toReplace = new RegExp('(' + Object.keys(charMap).join('|') + ')', 'g')
+function replacer (char) { return charMap[char] || char }
+
 function clean (str) {
-  return replaceChar(String(str).toLowerCase())
-}
-
-function charReplacer () {
-  var charMap = {
-    äàáâäæãåā: 'a',
-    çćč: 'c',
-    đð: 'd',
-    èéêëēėę: 'e',
-    îïíīįì: 'i',
-    ł: 'l',
-    ñńň: 'n',
-    ôöòóœøōõ: 'o',
-    ř: 'r',
-    śš: 's',
-    ß: 'ss',
-    ť: 't',
-    ûüùúūů: 'u',
-    ÿý: 'y',
-    žżŻź: 'z'
-  }
-
-  Object.keys(charMap).forEach(function (keys) {
-    keys.split('').forEach(function (char) {
-      charMap[char] = charMap[keys]
-    })
-  })
-
-  var toReplace = new RegExp('[' + Object.keys(charMap).join('') + ']', 'g')
-  function replacer (char) { return charMap[char] || char }
-  return function replaceChars (str) {
-    return str.replace(toReplace, replacer)
-  }
+  return String(str).toLowerCase().replace(toReplace, replacer)
 }

@@ -51,3 +51,13 @@ assert.strictEqual(res4c.length, 1)
 
 const res4d = get4('zu reyk')
 assert.strictEqual(res4d.length, 0)
+
+const arr5 = ['Sidra Trabanco', 'Sidra Trabanco Selección', 'Sidra iSidra', 'Sidra Acebal']
+const get5 = search(arr5)
+const res5a = get5('Sidra Trabanco')
+assert.strictEqual(res5a.length, 2)
+assert.strictEqual(res5a[0], arr5[0])
+assert.strictEqual(res5a[1], arr5[1])
+
+const res5b = get5('Sidra')
+assert.strictEqual(res5b.length, arr5.length)
