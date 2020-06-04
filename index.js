@@ -34,7 +34,7 @@ function prepareSimpleTextSearch (collection, property) {
 
   return function simpleTextSearch (q) {
     if (!collection || !q) return collection
-    const tokens = toQueryTokens(q)
+    const tokens = clean(q).split(/\W/)
     const result = []
 
     // eslint-disable-next-line no-labels
@@ -46,15 +46,6 @@ function prepareSimpleTextSearch (collection, property) {
     }
     return result
   }
-}
-
-function toQueryTokens (str) {
-  const content = []
-  for (const token of clean(str).split(/\b/)) {
-    if (!/\b/.test(token)) continue
-    content.push(token.trim())
-  }
-  return content
 }
 
 const specialCharMap = {
@@ -75,16 +66,16 @@ const specialCharMap = {
   žżŻź: 'z'
 }
 
-const charMap = { '\\W+': ' ' }
+const charMap = {}
 for (const keys of Object.keys(specialCharMap)) {
   for (const char of keys) {
     charMap[char] = specialCharMap[keys]
   }
 }
 
-const toReplace = new RegExp('(' + Object.keys(charMap).join('|') + ')', 'g')
-function replacer (char) { return charMap[char] || char }
+const toReplace = new RegExp('[' + Object.keys(charMap).join('') + ']|\\W+', 'g')
+function replacer (char) { return charMap[char] || ' ' }
 
 function clean (str) {
-  return String(str).toLowerCase().replace(toReplace, replacer)
+  return String(str).toLowerCase().replace(toReplace, replacer).trim()
 }
