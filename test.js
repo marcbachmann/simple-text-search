@@ -61,3 +61,19 @@ assert.strictEqual(res5a[1], arr5[1])
 
 const res5b = get5('Sidra')
 assert.strictEqual(res5b.length, arr5.length)
+
+// Normalize multiple umlauts
+const get6 = search(['Es Füür'])
+const res6 = get6('Fuur')
+assert.strictEqual(res6.length, 1)
+
+// Supports numbers in filters
+const get7 = search(['Hello 1', 'Hello 2', 'Test 1'])
+const res7a = get7('1')
+assert.strictEqual(res7a.length, 2)
+assert.strictEqual(res7a[0], 'Hello 1')
+assert.strictEqual(res7a[1], 'Test 1')
+
+const res7b = get7('2')
+assert.strictEqual(res7b.length, 1)
+assert.strictEqual(res7b[0], 'Hello 2')
