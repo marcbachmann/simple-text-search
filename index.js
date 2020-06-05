@@ -17,19 +17,18 @@ module.exports = prepareSimpleTextSearch
 function prepareSimpleTextSearch (collection, property) {
   let cachedPrunedElements
 
-  function * prunedElements () {
-    let i = -1
-    cachedPrunedElements = []
+  function prunedElements () {
+    const elements = []
     for (const elem of collection) {
-      i = i + 1
       let val = elem
       if (typeof property === 'string') val = val && val[property]
       if (typeof val === 'object') val = JSON.stringify(val)
       else if (typeof val !== 'string') continue
       val = { pruned: clean(val), elem }
-      cachedPrunedElements[i] = val
-      yield val
+      elements.push(val)
     }
+    cachedPrunedElements = elements
+    return cachedPrunedElements
   }
 
   return function simpleTextSearch (q) {
