@@ -17,9 +17,8 @@
   "license": "MIT",
   "devDependencies": {
     "nanobench": "^2.1.1",
-    "standard": "^14.3.3"
+    "standard": "^16.0.4"
   },
-  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcbachmann/simple-text-search.git"
