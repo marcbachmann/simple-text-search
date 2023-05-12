@@ -16,7 +16,7 @@
   "author": "Marc Bachmann <marc.brookman@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "nanobench": "^2.1.1",
+    "nanobench": "^3.0.0",
     "standard": "^16.0.4"
   },
   "repository": {
