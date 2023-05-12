@@ -1,0 +1,45 @@
+
+{
+  "extends": [
+    "config:base"
+  ],
+  "dependencyDashboard": true,
+  "labels": ["dependencies"],
+  "rebaseWhen": "auto",
+  "commitMessageExtra": "from {{{currentVersion}}} to {{#if isPinDigest}}{{{newDigestShort}}}{{else}}{{#if isMajor}}v{{{newMajor}}}{{else}}{{#if isSingleVersion}}v{{{newVersion}}}{{else}}{{#if newValue}}{{{newValue}}}{{else}}{{{newDigestShort}}}{{/if}}{{/if}}{{/if}}{{/if}}",
+  "prConcurrentLimit": 6,
+  "schedule": ["after 10pm and before 4am every day"],
+  "timezone": "CET",
+  "enabledManagers": ["npm"],
+  "rangeStrategy": "update-lockfile",
+  "prHourlyLimit": 6,
+  "separateMinorPatch": true,
+  "platformAutomerge": true,
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["babel"],
+      "groupName": "babel"
+    },
+    {
+      "matchBaseBranches": ["master", "main"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchBaseBranches": ["master", "main"],
+      "matchDepTypes": ["devDependencies"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "enabled": true,
+    "reviewers": ["@marcbachmann"],
+    "schedule": ["after 6pm and before 8am every day"],
+    "stabilityDays": 0,
+    "commitMessageExtra": "from {{{currentVersion}}} to {{{newVersion}}}",
+    "prCreation": "immediate"
+  }
+}
