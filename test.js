@@ -77,3 +77,13 @@ assert.strictEqual(res7a[1], 'Test 1')
 const res7b = get7('2')
 assert.strictEqual(res7b.length, 1)
 assert.strictEqual(res7b[0], 'Hello 2')
+
+// Allows a specifying pruning function
+const arr6 = [{ id: 1, name: 'Test' }, { id: 2, name: 'Marc' }]
+const get10 = search(arr3, (option) => option.name)
+const res10a = get3('Marc')
+assert.strictEqual(res3a[0], arr3[1])
+assert.strictEqual(res3a.length, 1)
+
+const res10b = get3(2)
+assert.strictEqual(res3b.length, 0)

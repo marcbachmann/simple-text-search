@@ -8,11 +8,16 @@ module.exports = prepareSimpleTextSearch
 //  ```
 //
 //  Objects in a collection get stringified to search it.
-//  You can also define a property to search in:
+//  You can also define a property to search in or a pruning function to preprocess
+//  the collection:
 //  ```
 //    var get = simpleTextSearch([{name: 'Zürich'}, {name: 'Marc'}], 'name')
 //    var results = get('zurich')
-//    // -> returns [{name: 'Marc'}]
+//    // -> returns [{name: 'Zürich'}]
+//
+//    var get = simpleTextSearch([{name: 'Zürich'}, {name: 'Marc'}], (v) => v.name)
+//    var results = get('zurich')
+//    // -> returns [{name: 'Zürich'}]
 //  ```
 function prepareSimpleTextSearch (collection, property) {
   let cachedPrunedElements
@@ -22,6 +27,7 @@ function prepareSimpleTextSearch (collection, property) {
     for (const elem of collection) {
       let val = elem
       if (typeof property === 'string') val = val && val[property]
+      else if (typeof property === 'function') val = val && property(val)
       if (typeof val === 'object') val = JSON.stringify(val)
       else if (typeof val !== 'string') continue
       val = { pruned: clean(val), elem }
