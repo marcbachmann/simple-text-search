@@ -15,7 +15,7 @@ steps:
   commands: ["npm test"]
 
 - name: release
-  image: livingdocs/semantic-release:v1.0.0
+  image: livingdocs/semantic-release:v2.1.1
   environment:
     GH_TOKEN:
       from_secret: GH_TOKEN
@@ -23,6 +23,6 @@ steps:
       from_secret: NPM_TOKEN
 ---
 kind: signature
-hmac: c7ebeb8dcbe929247fe0567d8cbd83668531db0d67dd66ed461d9095dcb9392f
+hmac: 0cee38eca6cecb238851a5e6cbeff2a091699b8ebd9692ea45c7c7ccfe353cc9
 
 ...
